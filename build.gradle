@@ -1,7 +1,6 @@
 plugins {
-    id 'kr.entree.spigradle' version '2.4.2'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'java'
+    id 'kr.entree.spigradle' version '2.4.3'
+    id 'io.github.goooler.shadow' version '8.1.7'
 }
 
 group = project.property("group")
@@ -22,8 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.bstats:bstats-bukkit:3.0.0'
-    compileOnly spigot(project.property("spigotApiVersion"))
+    compileOnly spigot(project.property("mcVersion"))
 }
 
 spigot {
@@ -37,12 +35,7 @@ spigot {
     }
 }
 
-shadowJar {
-    //archiveClassifier.set("")
-    relocate 'org.bstats', 'dev.chaws.xaero.map.spigot'
-}
-
-def targetJavaVersion = 17
+def targetJavaVersion = 21
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
@@ -61,10 +54,6 @@ tasks.withType(JavaCompile).configureEach {
 tasks {
     assemble.dependsOn(shadowJar)
 }
-
-// Not sure why this is needed to debug
-// https://github.com/spigradle/spigradle/issues/84
-//tasks.withType(Copy).all { duplicatesStrategy 'exclude' }
 
 processResources {
     def props = [version: version]
