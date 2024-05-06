@@ -1,4 +1,4 @@
-package net.sanctuaryhosting.XaeroServerMap;
+package net.sanctuaryhosting.xaeroservermap;
 
 import com.google.common.io.ByteStreams;
 import org.bukkit.entity.Player;

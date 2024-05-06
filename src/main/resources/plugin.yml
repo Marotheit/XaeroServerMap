@@ -1,0 +1,6 @@
+name: XaeroServerMap
+version: ${version}
+main: net.sanctuaryhosting.xaeroservermap.XaeroServerMapPlugin
+description: Adds automatic world map selection for servers when utilizing Xaero's Map mods.
+authors: [Chaws, Marotheit]
+api-version: 1.20

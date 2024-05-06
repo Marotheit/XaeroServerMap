@@ -1,18 +1,18 @@
 plugins {
     id 'kr.entree.spigradle' version '2.4.3'
     id 'io.github.goooler.shadow' version '8.1.7'
+    id 'io.papermc.paperweight.userdev' version '1.7.0'
 }
 
-group = project.property("group")
-version = project.property("version")
+group = "net.sanctuaryhosting"
+version = "1.20.6"
 
 repositories {
     mavenLocal()
     mavenCentral()
-    spigot()
     maven {
-        name = 'spigotmc-repo'
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
     maven {
         name = 'sonatype'
@@ -21,21 +21,11 @@ repositories {
 }
 
 dependencies {
-    compileOnly spigot(project.property("mcVersion"))
-}
-
-spigot {
-    name = project.property("pluginName")
-    authors = project.property("authors").split("\\s*,\\s*")
-    apiVersion = project.property("spigotApiVersion")
-    load = STARTUP
-    debug {
-        eula = true
-        buildVersion = project.property("mcVersion")
-    }
+    paperweight.paperDevBundle("1.20.6-R0.1-SNAPSHOT")
 }
 
 def targetJavaVersion = 21
+
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     sourceCompatibility = javaVersion
