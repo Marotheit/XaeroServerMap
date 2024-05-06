@@ -1,6 +1,6 @@
 # XaeroServerMap
 ### Adds automatic world map selection for servers when utilizing Xaero's Map mods.
-This project would not be possible without [ChristopherHaws](https://github.com/ChristopherHaws/mc-xaero-map-spigot). He did all the heavy lifting, I have simply updated the plugin.
+This project would not be possible without [ChristopherHaws](https://github.com/ChristopherHaws/mc-xaero-map-spigot). If you would like to support the project, you can sponsor ChristopherHaws [here](https://github.com/sponsors/ChristopherHaws). He did all the heavy lifting, I have simply updated the plugin for my personal needs.
 
 This plugin will enable [Xaero's Minimap](https://chocolateminecraft.com/minimap2.php) and [Xaero's World Map](https://chocolateminecraft.com/worldmap.php) to automatically select the correct world map when joining a different server on the same network. This can be useful on server networks where you may change servers often.
 
