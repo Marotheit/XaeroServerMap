@@ -22,7 +22,6 @@ public class XaeroServerMapPlugin extends JavaPlugin implements Listener{
 	public static Logger log;
 	private int serverLevelId;
 
-	@Override
 	public void onEnable() {
 		log = getLogger();
 		this.serverLevelId = this.initializeServerLevelId();
@@ -31,7 +30,6 @@ public class XaeroServerMapPlugin extends JavaPlugin implements Listener{
 		this.getServer().getPluginManager().registerEvents(this, this);
 	}
 
-	@Override
 	public void onDisable() {
 		this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
 	}
@@ -65,31 +63,33 @@ public class XaeroServerMapPlugin extends JavaPlugin implements Listener{
 		try {
 			if (!getDataFolder().exists()) {
 				getDataFolder().mkdir();
-				File xaeromapFile = new File(getDataFolder() + System.getProperty("file.separator") + "XaeroServerMapID.txt");
-				if (!xaeromapFile.exists()) {
-					try {
-						try (var xaeromapFileStream = new FileOutputStream(xaeromapFile, false)) {
-							var id = (new Random()).nextInt();
-							var idString = "id:" + id;
-							xaeromapFileStream.write(idString.getBytes());
+			}
+			var dataFolder = getDataFolder().getCanonicalPath();
+			var xaeroServerMapFile = new File(dataFolder + File.separator + "XaeroServerMapID.txt");
+			if (!xaeroServerMapFile.exists()) {
+				try {
+					try (var xaeroMapFileStream = new FileOutputStream(xaeroServerMapFile, false)) {
+						var id = (new Random()).nextInt();
+						var idString = "id:" + id;
+						xaeroMapFileStream.write(idString.getBytes());
 
-							return id;
-						}
-					} catch (Exception ex) {
-						log.warning("Failed to create XaeroServerMapID.txt: " + ex);
+						return id;
 					}
-				} else {
-					try (var fileReader = new FileReader(xaeromapFile); var bufferedReader = new BufferedReader(fileReader)) {
-						var line = bufferedReader.readLine();
-						var args = line.split(":");
-						if (!Objects.equals(args[0], "id")) {
-							throw new Exception("Failed to read World ID from XaeroServerMapID.txt");
-						}
+				} catch (Exception ex) {
+					log.warning("Failed to create XaeroServerMapID.txt: " + ex);
+				}
+			} else {
+				try (var fileReader = new FileReader(xaeroServerMapFile);
+					 var bufferedReader = new BufferedReader(fileReader)) {
+					var line = bufferedReader.readLine();
+					var args = line.split(":");
+					if (!Objects.equals(args[0], "id")) {
+						throw new Exception("Failed to read World ID from XaeroServerMapID.txt");
+					}
 
-						return Integer.parseInt(args[1]);
-					} catch (Exception ex) {
-						log.warning("Failed to read XaeroServerMapID.txt: " + ex);
-					}
+					return Integer.parseInt(args[1]);
+				} catch (Exception ex) {
+					log.warning("Failed to read XaeroServerMapID.txt: " + ex);
 				}
 			}
 		} catch (Exception ex) {
