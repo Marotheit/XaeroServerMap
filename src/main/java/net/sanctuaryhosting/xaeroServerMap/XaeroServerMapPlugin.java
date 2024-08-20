@@ -1,7 +1,6 @@
-package dev.chaws.xaero.map.spigot;
+package net.sanctuaryhosting.xaeroServerMap;
 
 import com.google.common.io.ByteStreams;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,40 +16,30 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class XaeroMapPlugin extends JavaPlugin implements Listener {
+public class XaeroServerMapPlugin extends JavaPlugin implements Listener{
 	private static final String worldmapChannel = "xaeroworldmap:main";
 	private static final String minimapChannel = "xaerominimap:main";
-
 	public static Logger log;
-
 	private int serverLevelId;
 
 	@Override
 	public void onEnable() {
 		log = getLogger();
 		this.serverLevelId = this.initializeServerLevelId();
-
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, worldmapChannel);
 		this.getServer().getMessenger().registerOutgoingPluginChannel(this, minimapChannel);
 		this.getServer().getPluginManager().registerEvents(this, this);
-
-		try {
-			new Metrics(this, 16554);
-		} catch (Throwable ignored) { }
 	}
 
+	@Override
 	public void onDisable() {
 		this.getServer().getMessenger().unregisterOutgoingPluginChannel(this);
 	}
 
-	// Use PlayerRegisterChannelEvent instead of PlayerLoginEvent because
-	// the client mod might not have registered to events on the channel yet
-	// so the packet won't get picked up by the mod.
 	@EventHandler
 	public void onPlayerRegisterChannel(PlayerRegisterChannelEvent event) {
 		var channel = event.getChannel();
-		if (!channel.equals(worldmapChannel) &&
-			!channel.equals(minimapChannel)) {
+		if (!channel.equals(worldmapChannel) && !channel.equals(minimapChannel)) {
 			return;
 		}
 
@@ -74,36 +63,37 @@ public class XaeroMapPlugin extends JavaPlugin implements Listener {
 
 	private int initializeServerLevelId() {
 		try {
-			var worldFolder = getServer().getWorldContainer().getCanonicalPath();
-			var xaeromapFile = new File(worldFolder + File.separator + "xaeromap.txt");
-			if (!xaeromapFile.exists()) {
-				try {
-					try (var xaeromapFileStream = new FileOutputStream(xaeromapFile, false)) {
-						var id = (new Random()).nextInt();
-						var idString = "id:" + id;
-						xaeromapFileStream.write(idString.getBytes());
+			if (!getDataFolder().exists()) {
+				getDataFolder().mkdir();
+				File xaeromapFile = new File(getDataFolder() + System.getProperty("file.separator") + "XaeroServerMapID.txt");
+				if (!xaeromapFile.exists()) {
+					try {
+						try (var xaeromapFileStream = new FileOutputStream(xaeromapFile, false)) {
+							var id = (new Random()).nextInt();
+							var idString = "id:" + id;
+							xaeromapFileStream.write(idString.getBytes());
 
-						return id;
+							return id;
+						}
+					} catch (Exception ex) {
+						log.warning("Failed to create XaeroServerMapID.txt: " + ex);
 					}
-				} catch (Exception ex) {
-					log.warning("Failed to create xaeromap.txt: " + ex);
-				}
-			} else {
-				try (var fileReader = new FileReader(xaeromapFile);
-					 var bufferedReader = new BufferedReader(fileReader)) {
-					var line = bufferedReader.readLine();
-					var args = line.split(":");
-					if (!Objects.equals(args[0], "id")) {
-						throw new Exception("Failed to read id from xaeromap.txt");
-					}
+				} else {
+					try (var fileReader = new FileReader(xaeromapFile); var bufferedReader = new BufferedReader(fileReader)) {
+						var line = bufferedReader.readLine();
+						var args = line.split(":");
+						if (!Objects.equals(args[0], "id")) {
+							throw new Exception("Failed to read World ID from XaeroServerMapID.txt");
+						}
 
-					return Integer.parseInt(args[1]);
-				} catch (Exception ex) {
-					log.warning("Failed to read xaeromap.txt: " + ex);
+						return Integer.parseInt(args[1]);
+					} catch (Exception ex) {
+						log.warning("Failed to read XaeroServerMapID.txt: " + ex);
+					}
 				}
 			}
 		} catch (Exception ex) {
-			log.warning("Failed to get world ID: " + ex);
+			log.warning("Failed to get World ID: " + ex);
 		}
 
 		return 0;
