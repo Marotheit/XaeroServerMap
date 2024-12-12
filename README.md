@@ -1,4 +1,6 @@
 # XaeroServerMap
+![License](https://img.shields.io/github/license/Marotheit/XaeroServerMap)
+![GitHub Latest Release](https://img.shields.io/github/v/release/Marotheit/XaeroServerMap)
 ### Adds automatic world map selection for servers when utilizing Xaero's Map mods.
 This project would not be possible without [ChristopherHaws](https://github.com/ChristopherHaws/mc-xaero-map-spigot). If you would like to support the project, you can sponsor ChristopherHaws [here](https://github.com/sponsors/ChristopherHaws). He did all the heavy lifting, I have simply updated the plugin for my personal needs.
 
